@@ -5,7 +5,7 @@ import pydeck as pdk
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# [ST4] Page configuration must be the first Streamlit command
+# Page configuration 
 st.set_page_config(page_title="Airbnb Data Analysis", layout="wide")
 
 
@@ -31,11 +31,11 @@ def load_data(listings_path, reviews_path, neighborhoods_path):
         return None, None, None
 
 
-# Load datasets
+# Load data
 listings, reviews, neighborhoods = load_data(
-    'final/listings.csv',
-    'final/reviews.csv',
-    'final/neighbourhoods.csv'
+    'listings.csv',
+    'reviews.csv',
+    'neighbourhoods.csv'
 )
 
 # Sidebar navigation
