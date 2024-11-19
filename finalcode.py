@@ -4,7 +4,18 @@ import numpy as np
 import pydeck as pdk
 import matplotlib.pyplot as plt
 import seaborn as sns
+def comment_doc_string():
+    """
+    Name: Ava Radford
+    CS230: Section 6
+    Data: Airbnb Listings, Reviews, Neighborhoods
+    URL: https://cs-230-final-htuyy9gf8ikpfszhpprecd.streamlit.app/
 
+    Description:
+    This program analyzes Airbnb data, offering insights into pricing, availability, and reviews.
+    It features interactive widgets, detailed charts, and a map visualization.
+    """
+    pass #preventing docstring from being displayed when running
 # Page configuration 
 st.set_page_config(page_title="Airbnb Data Analysis", layout="wide")
 
@@ -40,7 +51,7 @@ listings, reviews, neighborhoods = load_data(
 
 # Sidebar navigation
 section = st.sidebar.radio("Choose a Section",
-                           ("Boston Airbnb Overview", "Listings and Neighborhoods", "Map and Visualizations"))
+                           ("Boston Airbnb Overview", "Statistics By Neighborhood", "Listing Map and Price Distribution By Neighborhood"))
 
 
 # Function to filter listings by neighborhood and price
@@ -64,23 +75,11 @@ if section == "Boston Airbnb Overview":
     st.metric(label="Average Price", value=f"${mean_price:.2f}")
     st.metric(label="Maximum Price", value=f"${max_price:.2f}")
 
-elif section == "Listings and Neighborhoods":
-    st.title("Top Listings and Neighborhood in Boston Summary")
-
-    # Sidebar filters for neighborhood and price
-    neighborhood = st.sidebar.selectbox("Select a Neighborhood", listings['neighbourhood'].unique())
-    price_range = st.sidebar.slider("Select Price Range", int(listings['price'].min()), int(listings['price'].max()),
-                                    (50, 300))
-    filtered_listings = filter_listings(neighborhood, price_range)
-
-    # Top 10 Listings based on price_per_night
-    st.subheader("Top 10 Listings")
-    top_listings = filtered_listings.nlargest(10, 'price_per_night')[
-        ['name', 'price_per_night', 'neighbourhood', 'number_of_reviews']]
-    st.write(top_listings)
-
+elif section == "Statistics By Neighborhood":
     # Neighborhood Summary
     st.subheader("Neighborhood Summary")
+
+    # Group and aggregate data
     neighborhood_summary = listings.groupby('neighbourhood').agg({
         'price': 'mean',
         'number_of_reviews': 'sum',
@@ -90,10 +89,42 @@ elif section == "Listings and Neighborhoods":
         'number_of_reviews': 'Total Reviews',
         'availability_365': 'Available Listings Count'
     })
-    st.write(neighborhood_summary)
 
-elif section == "Map and Visualizations":
-    st.title("Map and Visualizations")
+    # Reset the index for easier plotting
+    neighborhood_summary = neighborhood_summary.reset_index()
+
+    # Display chart for Average Price by Neighborhood
+    st.subheader("Average Price by Neighborhood")
+    plt.figure(figsize=(10, 6))
+    sns.barplot(data=neighborhood_summary, x='neighbourhood', y='Average Price', palette='Blues_d')
+    plt.xticks(rotation=45, ha='right')
+    plt.title("Average Price by Neighborhood")
+    plt.xlabel("Neighborhood")
+    plt.ylabel("Average Price ($)")
+    st.pyplot(plt)
+
+    # Display chart for Total Reviews by Neighborhood
+    st.subheader("Total Reviews by Neighborhood")
+    plt.figure(figsize=(10, 6))
+    sns.barplot(data=neighborhood_summary, x='neighbourhood', y='Total Reviews', palette='Greens_d')
+    plt.xticks(rotation=45, ha='right')
+    plt.title("Total Reviews by Neighborhood")
+    plt.xlabel("Neighborhood")
+    plt.ylabel("Total Reviews")
+    st.pyplot(plt)
+
+    # Display chart for Available Listings by Neighborhood
+    st.subheader("Available Listings by Neighborhood")
+    plt.figure(figsize=(10, 6))
+    sns.barplot(data=neighborhood_summary, x='neighbourhood', y='Available Listings Count', palette='Oranges_d')
+    plt.xticks(rotation=45, ha='right')
+    plt.title("Available Listings by Neighborhood")
+    plt.xlabel("Neighborhood")
+    plt.ylabel("Available Listings")
+    st.pyplot(plt)
+
+elif section == "Listing Map and Price Distribution By Neighborhood":
+    st.title("Listing Map and Price Distribution By Neighborhood")
 
     # Sidebar filters for map visualization
     neighborhood = st.sidebar.selectbox("Select a Neighborhood", listings['neighbourhood'].unique())
