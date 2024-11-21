@@ -122,6 +122,21 @@ elif section == "Statistics By Neighborhood":
     plt.xlabel("Neighborhood")
     plt.ylabel("Available Listings")
     st.pyplot(plt)
+   
+    # Create a list of dictionaries summarizing neighborhood data
+    neighborhood_dict_list = [
+        {
+            'Neighborhood': row['neighbourhood'],
+            'Average Price': round(row['Average Price'], 2),
+            'Total Reviews': row['Total Reviews'],
+            'Available Listings Count': row['Available Listings Count']
+        }
+        for _, row in neighborhood_summary.iterrows()
+    ]
+
+    # Display as a table
+    st.subheader("Neighborhood Data Summary (List of Dictionaries)")
+    st.write(neighborhood_dict_list)
 
 elif section == "Listing Map and Price Distribution By Neighborhood":
     st.title("Listing Map and Price Distribution By Neighborhood")
