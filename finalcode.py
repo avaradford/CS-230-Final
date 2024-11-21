@@ -9,8 +9,9 @@ def comment_doc_string():
     Name: Ava Radford
     CS230: Section 6
     Data: Airbnb Listings, Reviews, Neighborhoods
-    URL: https://cs-230-final-htuyy9gf8ikpfszhpprecd.streamlit.app/
-
+    Streamlit URL: https://cs-230-final-htuyy9gf8ikpfszhpprecd.streamlit.app/
+    Local Host URL: http://localhost:8501/
+    
     Description:
     This program analyzes Boston's Airbnb data, offering insights into pricing, availability, and reviews by neighborhood.
     It features interactive widgets, detailed charts, and a map visualization.
