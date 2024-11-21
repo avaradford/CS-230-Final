@@ -134,9 +134,15 @@ elif section == "Statistics By Neighborhood":
         for _, row in neighborhood_summary.iterrows()
     ]
 
-    # Display as a table
-    st.subheader("Neighborhood Data Summary (List of Dictionaries)")
-    st.write(neighborhood_dict_list)
+    neighborhood_df = pd.DataFrame(neighborhood_dict_list)
+
+    # Display it as a styled table
+    st.subheader("Neighborhood Data Summary")
+    st.dataframe(neighborhood_df.style.format({
+    "Average Price": "${:.2f}", 
+    "Total Reviews": "{:,}", 
+    "Available Listings Count": "{:,}"
+    }))
 
 elif section == "Listing Map and Price Distribution By Neighborhood":
     st.title("Listing Map and Price Distribution By Neighborhood")
